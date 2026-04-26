@@ -33,13 +33,13 @@ const BlogInteraction = () => {
     if (access_token) {
       axios
         .post(
-          import.meta.env.VITE_SERVER_DOMAIN + "/isLiked-by-user",
+          import.meta.env.VITE_SERVER_DOMAIN + "/blog/isLiked-by-user",
           { _id },
           {
             headers: {
               Authorization: `Bearer ${access_token}`,
             },
-          }
+          },
         )
         .then(({ data: { result } }) => {
           console.log(result);
@@ -52,34 +52,61 @@ const BlogInteraction = () => {
   }, []);
 
   const handleLike = () => {
-    if (access_token) {
-      //like the blog
-      setLikedByUser((preVal) => !preVal);
-
-      !isLikedByUser ? total_likes++ : total_likes--;
-
-      setBlog({ ...blog, activity: { ...activity, total_likes } });
-
-      axios
-        .post(
-          import.meta.env.VITE_SERVER_DOMAIN + "/like-blog",
-          { _id, isLikedByUser },
-          {
-            headers: {
-              Authorization: `Bearer ${access_token}`,
-            },
-          }
-        )
-        .then(({ data }) => {
-          console.log(data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
+    if (!access_token) {
       toast.error("Please login to like this blog");
+      return;
     }
+
+    const nextLiked = !isLikedByUser;
+    const updatedLikes = nextLiked ? total_likes + 1 : total_likes - 1;
+
+    setLikedByUser(nextLiked);
+    setBlog({ ...blog, activity: { ...activity, total_likes: updatedLikes } });
+
+    axios
+      .post(
+        import.meta.env.VITE_SERVER_DOMAIN + "/blog/like-blog",
+        { _id, isLikedByUser },
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        },
+      )
+      .catch((err) => {
+        console.log(err);
+      });
   };
+
+  // const handleLike = () => {
+  //   if (access_token) {
+  //     //like the blog
+  //     setLikedByUser((preVal) => !preVal);
+
+  //     !isLikedByUser ? total_likes++ : total_likes--;
+
+  //     setBlog({ ...blog, activity: { ...activity, total_likes } });
+
+  //     axios
+  //       .post(
+  //         import.meta.env.VITE_SERVER_DOMAIN + "/blog/like-blog",
+  //         { _id, isLikedByUser },
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${access_token}`,
+  //           },
+  //         },
+  //       )
+  //       .then(({ data }) => {
+  //         console.log(data);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   } else {
+  //     toast.error("Please login to like this blog");
+  //   }
+  // };
 
   return (
     <>

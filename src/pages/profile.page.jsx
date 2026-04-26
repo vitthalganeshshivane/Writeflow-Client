@@ -52,7 +52,7 @@ const ProfilePage = () => {
 
   const fetchUserProfile = () => {
     axios
-      .post(import.meta.env.VITE_SERVER_DOMAIN + "/get-profile", {
+      .post(import.meta.env.VITE_SERVER_DOMAIN + "/user/get-profile", {
         username: profileId,
       })
       .then(({ data: user }) => {
@@ -74,7 +74,7 @@ const ProfilePage = () => {
     user_id = user_id === undefined ? blogs.user_id : user_id;
 
     axios
-      .post(import.meta.env.VITE_SERVER_DOMAIN + "/search-blogs", {
+      .post(import.meta.env.VITE_SERVER_DOMAIN + "/blog/search-blogs", {
         author: user_id,
         page,
       })
@@ -83,7 +83,7 @@ const ProfilePage = () => {
           state: blogs,
           data: data.blogs,
           page,
-          countRoute: "/search-blogs-count",
+          countRoute: "/blog/search-blogs-count",
           data_to_send: { author: user_id },
         });
 

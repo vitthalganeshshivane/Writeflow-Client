@@ -51,7 +51,7 @@ function BlogEditor() {
           data: Array.isArray(content) ? content[0] : content,
           tools: tools,
           placeholder: "Let's write an awesome story",
-        })
+        }),
       );
     }
   }, []);
@@ -193,13 +193,13 @@ function BlogEditor() {
 
         axios
           .post(
-            import.meta.env.VITE_SERVER_DOMAIN + "/create-blog",
+            import.meta.env.VITE_SERVER_DOMAIN + "/blog/create-blog",
             { ...blogObj, id: blog_id },
             {
               headers: {
                 Authorization: `Bearer ${access_token}`,
               },
-            }
+            },
           )
           .then(() => {
             e.target.classList.remove("disable");
