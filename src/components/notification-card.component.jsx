@@ -47,13 +47,13 @@ const NotificationCard = ({ data, index, notificationState }) => {
     target.setAttribute("disabled", true);
     axios
       .post(
-        import.meta.env.VITE_SERVER_DOMAIN + "/delete-comment",
+        import.meta.env.VITE_SERVER_DOMAIN + "/blog/delete-comment",
         { _id: comment_id },
         {
           headers: {
             Authorization: `Bearer ${access_token}`,
           },
-        }
+        },
       )
       .then(() => {
         if (type == "comment") {
@@ -102,8 +102,8 @@ const NotificationCard = ({ data, index, notificationState }) => {
               {type == "like"
                 ? "liked your blog"
                 : type == "comment"
-                ? "commented on"
-                : "replied on"}
+                  ? "commented on"
+                  : "replied on"}
             </span>
           </h1>
           {type == "reply" ? (

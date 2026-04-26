@@ -36,7 +36,7 @@ const ChangePassword = () => {
       !passwordRegex.test(newPassword)
     ) {
       toast.error(
-        "Password should be 6 to 20 characters long with a numeric, 1 lowercase and 1 uppercase letters"
+        "Password should be 6 to 20 characters long with a numeric, 1 lowercase and 1 uppercase letters",
       );
     }
 
@@ -45,11 +45,15 @@ const ChangePassword = () => {
     let loadingToast = toast.loading("Updating......");
 
     axios
-      .post(import.meta.env.VITE_SERVER_DOMAIN + "/change-password", formData, {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
+      .post(
+        import.meta.env.VITE_SERVER_DOMAIN + "/auth/change-password",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
         },
-      })
+      )
       .then(() => {
         toast.dismiss(loadingToast);
         e.target.removeAttribute("disabled");

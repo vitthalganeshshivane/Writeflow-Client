@@ -53,13 +53,13 @@ const CommentField = ({
 
     axios
       .post(
-        import.meta.env.VITE_SERVER_DOMAIN + "/add-comment",
+        import.meta.env.VITE_SERVER_DOMAIN + "/blog/add-comment",
         { _id, blog_author, comment, replying_to: replyingTo },
         {
           headers: {
             Authorization: `Bearer ${access_token}`,
           },
-        }
+        },
       )
       .then(({ data }) => {
         setComment("");

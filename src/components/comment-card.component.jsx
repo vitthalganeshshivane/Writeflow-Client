@@ -90,11 +90,15 @@ const CommentCard = ({ index, leftVal, commentData }) => {
       let parentIndex = getParentIndex();
 
       if (parentIndex !== undefined) {
+        // commentsArr[parentIndex].children = commentsArr[
+        //   parentIndex
+        // ].children.filter((child) => {
+        //   child !== _id;
+        // });
+
         commentsArr[parentIndex].children = commentsArr[
           parentIndex
-        ].children.filter((child) => {
-          child !== _id;
-        });
+        ].children.filter((child) => child !== _id);
 
         if (!commentsArr[parentIndex].children.length) {
           commentsArr[parentIndex].isReplyLoaded = false;
@@ -131,7 +135,7 @@ const CommentCard = ({ index, leftVal, commentData }) => {
       hideReplies();
 
       axios
-        .post(import.meta.env.VITE_SERVER_DOMAIN + "/get-replies", {
+        .post(import.meta.env.VITE_SERVER_DOMAIN + "/blog/get-replies", {
           _id: commentsArr[currentIndex]._id,
           skip,
         })
@@ -158,7 +162,7 @@ const CommentCard = ({ index, leftVal, commentData }) => {
     e.target.setAttribute("disabled", true);
     axios
       .post(
-        import.meta.env.VITE_SERVER_DOMAIN + "/delete-comment",
+        import.meta.env.VITE_SERVER_DOMAIN + "/blog/delete-comment",
         {
           _id,
         },
@@ -166,7 +170,7 @@ const CommentCard = ({ index, leftVal, commentData }) => {
           headers: {
             Authorization: `Bearer ${access_token}`,
           },
-        }
+        },
       )
       .then(() => {
         e.target.removeAttribute("disabled");

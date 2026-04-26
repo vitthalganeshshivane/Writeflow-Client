@@ -103,7 +103,7 @@ function PublishForm() {
 
     if (!des.length || des.length > 200) {
       return toast.error(
-        `Write a description about your blog within ${characterLimit} characters to publish`
+        `Write a description about your blog within ${characterLimit} characters to publish`,
       );
     }
 
@@ -126,13 +126,13 @@ function PublishForm() {
 
     axios
       .post(
-        import.meta.env.VITE_SERVER_DOMAIN + "/create-blog",
+        import.meta.env.VITE_SERVER_DOMAIN + "/blog/create-blog",
         { ...blogObj, id: blog_id },
         {
           headers: {
             Authorization: `Bearer ${access_token}`,
           },
-        }
+        },
       )
       .then(() => {
         e.target.classList.remove("disable");

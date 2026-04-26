@@ -45,7 +45,7 @@ const BlogPage = () => {
 
   const fetchBlog = () => {
     axios
-      .post(import.meta.env.VITE_SERVER_DOMAIN + "/get-blog", { blog_id })
+      .post(import.meta.env.VITE_SERVER_DOMAIN + "/blog/get-blog", { blog_id })
       .then(async ({ data }) => {
         const blogData = data.blog;
 
@@ -63,7 +63,7 @@ const BlogPage = () => {
 
         // Step 4 — fetch similar blogs
         axios
-          .post(import.meta.env.VITE_SERVER_DOMAIN + "/search-blogs", {
+          .post(import.meta.env.VITE_SERVER_DOMAIN + "/blog/search-blogs", {
             tag: blogData.tags[0],
             limit: 6,
             eliminate_blog: blog_id,

@@ -27,13 +27,13 @@ const ManageBlogs = () => {
   const getBlogs = ({ page, draft, deletedDocCount = 0 }) => {
     axios
       .post(
-        import.meta.env.VITE_SERVER_DOMAIN + "/user-written-blogs",
+        import.meta.env.VITE_SERVER_DOMAIN + "/blog/user-written-blogs",
         { page, draft, query, deletedDocCount },
         {
           headers: {
             Authorization: `Bearer ${access_token}`,
           },
-        }
+        },
       )
       .then(async ({ data }) => {
         let formatedData = await filterPaginationData({
