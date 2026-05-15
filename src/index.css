@@ -130,3 +130,133 @@
 .cdx-settings-button[data-tune="stretched"] {
   display: none;
 }
+
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* ===== SLICK SCROLLBAR (Notion-style) ===== */
+
+.slick-scrollbar {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(100, 100, 100, 0.3) transparent;
+}
+
+/* Chrome, Edge, Safari */
+.slick-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.slick-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.slick-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 100, 100, 0.25);
+  border-radius: 999px;
+  transition: background-color 0.2s ease;
+}
+
+/* Hover effect (subtle, not aggressive) */
+.slick-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 100, 100, 0.45);
+}
+
+/* Optional: active (when dragging) */
+.slick-scrollbar::-webkit-scrollbar-thumb:active {
+  background-color: rgba(100, 100, 100, 0.6);
+}
+
+/* ===== EditorJS table popover: no internal scrollbar ===== */
+body[data-theme="dark"] #textEditor .tc-popover.tc-popover--opened {
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+body[data-theme="dark"] #textEditor .tc-popover.tc-popover--opened::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+}
+
+body[data-theme="dark"] #textEditor .tc-popover.tc-popover--opened {
+  scrollbar-width: none !important;
+}
+
+/* ===== EditorJS "+" menu scrollbar: reuse slick style ===== */
+body[data-theme="dark"] #textEditor .ce-popover__items {
+  scrollbar-width: thin !important; /* Firefox */
+  scrollbar-color: rgba(100, 100, 100, 0.3) transparent !important;
+  padding-right: 2px;
+}
+
+body[data-theme="dark"] #textEditor .ce-popover__items::-webkit-scrollbar {
+  width: 6px !important;
+  height: 6px !important;
+}
+
+body[data-theme="dark"] #textEditor .ce-popover__items::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+body[data-theme="dark"] #textEditor .ce-popover__items::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 100, 100, 0.25) !important;
+  border-radius: 999px !important;
+}
+
+body[data-theme="dark"] #textEditor .ce-popover__items:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 100, 100, 0.45) !important;
+}
+
+body[data-theme="dark"] #textEditor .ce-popover__items::-webkit-scrollbar-thumb:active {
+  background-color: rgba(100, 100, 100, 0.6) !important;
+}
+
+/* ===== EditorJS Table popup scrollbar: final single rule ===== */
+body[data-theme="dark"] #textEditor .tc-popover.tc-popover--opened {
+  max-height: 260px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(100, 100, 100, 0.35) transparent !important;
+  scrollbar-gutter: stable !important;
+}
+
+body[data-theme="dark"]
+  #textEditor
+  .tc-popover.tc-popover--opened::-webkit-scrollbar {
+  width: 6px !important;
+  height: 6px !important;
+}
+
+body[data-theme="dark"]
+  #textEditor
+  .tc-popover.tc-popover--opened::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+body[data-theme="dark"]
+  #textEditor
+  .tc-popover.tc-popover--opened::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 100, 100, 0.25) !important;
+  border-radius: 999px !important;
+}
+
+body[data-theme="dark"]
+  #textEditor
+  .tc-popover.tc-popover--opened:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 100, 100, 0.45) !important;
+}
+
+body[data-theme="dark"]
+  #textEditor
+  .tc-popover.tc-popover--opened::-webkit-scrollbar-thumb:active {
+  background-color: rgba(100, 100, 100, 0.6) !important;
+}
