@@ -37,7 +37,7 @@ const EditProfile = () => {
   useEffect(() => {
     if (access_token) {
       axios
-        .post(import.meta.env.VITE_SERVER_DOMAIN + "/get-profile", {
+        .post(import.meta.env.VITE_SERVER_DOMAIN + "/user/get-profile", {
           username: userAuth.username,
         })
         .then(({ data }) => {
@@ -75,13 +75,13 @@ const EditProfile = () => {
           if (url) {
             axios
               .post(
-                import.meta.env.VITE_SERVER_DOMAIN + "/update-profile-img",
+                import.meta.env.VITE_SERVER_DOMAIN + "/user/update-profile-img",
                 { url },
                 {
                   headers: {
                     Authorization: `Bearer ${access_token}`,
                   },
-                }
+                },
               )
               .then(({ data }) => {
                 let newUserAuth = {
@@ -148,7 +148,7 @@ const EditProfile = () => {
 
     axios
       .post(
-        import.meta.env.VITE_SERVER_DOMAIN + "/update-profile",
+        import.meta.env.VITE_SERVER_DOMAIN + "/user/update-profile",
         {
           username,
           bio,
@@ -165,7 +165,7 @@ const EditProfile = () => {
           headers: {
             Authorization: `Bearer ${access_token}`,
           },
-        }
+        },
       )
       .then(({ data }) => {
         if (userAuth.username !== data.username) {

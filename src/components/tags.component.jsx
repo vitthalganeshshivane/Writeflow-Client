@@ -17,7 +17,6 @@ const Tag = ({ tag, tagIndex }) => {
       setBlog({ ...blog, tags });
       toast.success("Tag updated 💫");
       e.target.setAttribute("contentEditable", false);
-      console.log(tags);
     }
   };
 

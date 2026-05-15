@@ -15,12 +15,14 @@ const UserAuthForm = ({ type }) => {
     setUserAuth,
   } = useContext(userContext);
 
-  console.log(access_token);
-
   const userAuthThroughServer = (serverRoute, formData) => {
     axios
-      .post(import.meta.env.VITE_SERVER_DOMAIN + serverRoute, formData)
+      .post(
+        import.meta.env.VITE_SERVER_DOMAIN + "/auth" + serverRoute,
+        formData,
+      )
       .then(({ data }) => {
+        console.log(data);
         storeInSession("user", JSON.stringify(data));
         console.log(sessionStorage);
         setUserAuth(data);
@@ -65,7 +67,7 @@ const UserAuthForm = ({ type }) => {
 
     if (!passwordRegex.test(password)) {
       return toast.error(
-        "Password should be 6 to 20 characters long with a numeric, 1 lowercase and 1 uppercase letters"
+        "Password should be 6 to 20 characters long with a numeric, 1 lowercase and 1 uppercase letters",
       );
     }
 

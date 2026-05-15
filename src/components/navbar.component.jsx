@@ -15,11 +15,6 @@ function Navbar() {
 
   let navigate = useNavigate();
 
-  // const {
-  //   userAuth,
-  //   userAuth: { access_token, profile_img },
-  // } = useContext(userContext);
-
   const { userAuth = {}, setUserAuth } = useContext(userContext) || {};
   const { access_token, profile_img, new_notification_available, isAdmin } =
     userAuth;
@@ -28,13 +23,13 @@ function Navbar() {
     if (access_token) {
       axios
         .post(
-          import.meta.env.VITE_SERVER_DOMAIN + "/new-notification",
+          import.meta.env.VITE_SERVER_DOMAIN + "/notification/new-notification",
           {},
           {
             headers: {
               Authorization: `Bearer ${access_token}`,
             },
-          }
+          },
         )
         .then(({ data }) => {
           setUserAuth({ ...userAuth, ...data });
@@ -105,7 +100,6 @@ function Navbar() {
           >
             <i className="fi fi-rr-search text-xl"></i>
           </button>
-
           {isAdmin ? (
             <Link to="/editor" className="hidden md:flex gap-2 link">
               <i className="fi fi-rr-file-edit text-xl"></i>
@@ -114,7 +108,6 @@ function Navbar() {
           ) : (
             ""
           )}
-
           <button
             className="w-12 h-12 rounded-full bg-grey relative hover:bg-black/10"
             onClick={changeTheme}

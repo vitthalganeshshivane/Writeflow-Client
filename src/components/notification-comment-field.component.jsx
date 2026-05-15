@@ -39,7 +39,7 @@ const NotificationCommentField = ({
 
     axios
       .post(
-        import.meta.env.VITE_SERVER_DOMAIN + "/add-comment",
+        import.meta.env.VITE_SERVER_DOMAIN + "/blog/add-comment",
         {
           _id,
           blog_author: user_id,
@@ -51,7 +51,7 @@ const NotificationCommentField = ({
           headers: {
             Authorization: `Bearer ${access_token}`,
           },
-        }
+        },
       )
       .then(({ data }) => {
         setReplying(false);
