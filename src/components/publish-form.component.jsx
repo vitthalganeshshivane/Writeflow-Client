@@ -32,13 +32,12 @@ function PublishForm() {
 
   const handleBlogTitleChange = (e) => {
     let input = e.target;
-
-    setBlog({ ...blog, title: input.value });
+    setBlog((current) => ({ ...current, title: input.value }));
   };
 
   const handleBlogDesChange = (e) => {
     let input = e.target;
-    setBlog({ ...blog, des: input.value });
+    setBlog((current) => ({ ...current, des: input.value }));
   };
 
   const handleDesKeyDown = (e) => {
@@ -179,16 +178,24 @@ function PublishForm() {
           <input
             type="text"
             placeholder="Blog Title"
-            defaultValue={title}
+            value={title}
             className="input-box pl-4"
             onChange={handleBlogTitleChange}
           />
+
           <p className="text-dark-grey mb-2 mt-9">
             Short Description about your blog
           </p>
-          <textarea
+          {/* <textarea
             maxLength={characterLimit}
             defaultValue={des}
+            className="h-40 resize-none leading-7 input-box pl-4"
+            onChange={handleBlogDesChange}
+            onKeyDown={handleDesKeyDown}
+          ></textarea> */}
+          <textarea
+            maxLength={characterLimit}
+            value={des}
             className="h-40 resize-none leading-7 input-box pl-4"
             onChange={handleBlogDesChange}
             onKeyDown={handleDesKeyDown}

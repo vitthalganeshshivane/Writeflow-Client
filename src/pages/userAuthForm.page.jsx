@@ -15,8 +15,6 @@ const UserAuthForm = ({ type }) => {
     setUserAuth,
   } = useContext(userContext);
 
-  console.log(access_token);
-
   const userAuthThroughServer = (serverRoute, formData) => {
     axios
       .post(
@@ -24,6 +22,7 @@ const UserAuthForm = ({ type }) => {
         formData,
       )
       .then(({ data }) => {
+        console.log(data);
         storeInSession("user", JSON.stringify(data));
         console.log(sessionStorage);
         setUserAuth(data);
