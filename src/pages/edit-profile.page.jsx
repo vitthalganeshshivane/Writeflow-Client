@@ -70,7 +70,7 @@ const EditProfile = () => {
 
       e.target.setAttribute("disabled", true);
 
-      uploadImage(updateProfileImg)
+      uploadImage(updateProfileImg, access_token)
         .then((url) => {
           if (url) {
             axios

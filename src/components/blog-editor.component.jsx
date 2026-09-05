@@ -310,7 +310,7 @@ function BlogEditor() {
     if (img) {
       const loadingToast = toast.loading("Uploading...");
 
-      uploadImage(img)
+      uploadImage(img, access_token)
         .then((url) => {
           if (url) {
             toast.dismiss(loadingToast);

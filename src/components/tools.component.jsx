@@ -81,6 +81,7 @@ import Table from "@editorjs/table"; // npm install @editorjs/table
 import Delimiter from "@editorjs/delimiter"; // npm install @editorjs/delimiter
 import Warning from "@editorjs/warning"; // npm install @editorjs/warning
 import { uploadImage } from "../common/aws";
+import { lookInSession } from "../common/session";
 
 const uploadImagebyURL = (e) => {
   return new Promise((resolve) => resolve(e)).then((url) => ({
@@ -90,7 +91,8 @@ const uploadImagebyURL = (e) => {
 };
 
 const uploadImageByFile = (e) => {
-  return uploadImage(e)
+  const user = JSON.parse(lookInSession("user") || "{}");
+  return uploadImage(e, user.access_token)
     .then((url) => {
       if (url) return { success: 1, file: { url } };
     })
