@@ -41,7 +41,7 @@ const ManageBlogs = () => {
           data: data.blogs,
           page,
           user: access_token,
-          countRoute: "/user-written-blogs-count",
+          countRoute: "/blog/user-written-blogs-count",
           data_to_send: { draft, query },
         });
 
