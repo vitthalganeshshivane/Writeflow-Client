@@ -10,6 +10,7 @@ import { activeTabRef } from "../components/inpage-navigation.component";
 import NoDataMessage from "../components/nodata.component";
 import { filterPaginationData } from "../common/filter-pagination-data";
 import LoadMoreDataBtn from "../components/load-more.component";
+import ThreadsFeed from "../components/threads-feed.component";
 
 const HomePage = () => {
   let [blogs, setBlog] = useState(null);
@@ -116,7 +117,7 @@ const HomePage = () => {
       <section className="h-cover flex justify-center gap-10">
         <div className="w-full">
           <InPageNavigation
-            routes={[pageState, "trending blogs"]}
+            routes={[pageState, "threads", "trending blogs"]}
             defaultHidden={["trending blogs"]}
           >
             <>
@@ -146,6 +147,9 @@ const HomePage = () => {
                 }
               />
             </>
+
+            {/* Threads feed tab */}
+            <ThreadsFeed />
 
             <>
               {trendingBlogs === null ? (
