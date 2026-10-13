@@ -20,9 +20,23 @@ export const userContext = createContext({});
 export const ThemeContext = createContext({});
 export const AIModelContext = createContext({});
 
+const defaultAIModel = {
+  provider: "nvidia",
+  model: "meta/llama-3.1-70b-instruct",
+  name: "LLaMA 70B",
+  desc: "Best reasoning 🔥",
+};
+
 const getInitialAIModel = () => {
-  if (typeof window === "undefined") return "groq";
-  return localStorage.getItem("ai_model") || "groq";
+  if (typeof window === "undefined") return defaultAIModel;
+  const saved = localStorage.getItem("ai_model");
+  if (!saved || saved === "[object Object]") return defaultAIModel;
+  try {
+    const parsed = JSON.parse(saved);
+    return parsed && typeof parsed === "object" ? parsed : defaultAIModel;
+  } catch {
+    return defaultAIModel;
+  }
 };
 
 const App = () => {
@@ -56,7 +70,13 @@ const App = () => {
   }, [theme]);
 
   useEffect(() => {
-    localStorage.setItem("ai_model", aiModel);
+    if (aiModel) {
+      try {
+        localStorage.setItem("ai_model", JSON.stringify(aiModel));
+      } catch (e) {
+        console.error("Failed to save ai_model:", e);
+      }
+    }
   }, [aiModel]);
 
   return (

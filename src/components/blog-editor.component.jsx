@@ -50,6 +50,24 @@ function BlogEditor() {
   const titleInputRef = useRef(null);
   const [modelOpen, setModelOpen] = useState(false);
 
+  // ── Autosave state & refs ──────────────────
+  const [autosaveStatus, setAutosaveStatus] = useState(""); // "", "saving", "saved", "offline"
+  const [lastSavedTime, setLastSavedTime] = useState(null);
+  const activeBlogIdRef = useRef(blog_id || blog?.blog_id || null);
+  const editorInstanceRef = useRef(null);
+  const isSavingRef = useRef(false);
+  const blogStateRef = useRef(blog);
+
+  useEffect(() => {
+    blogStateRef.current = blog;
+  }, [blog]);
+
+  useEffect(() => {
+    if (blog_id) {
+      activeBlogIdRef.current = blog_id;
+    }
+  }, [blog_id]);
+
   const trimmedTitle = title.trim();
   const slashPrompt = trimmedTitle.startsWith("/write ")
     ? trimmedTitle.slice(7).trim()
@@ -291,17 +309,144 @@ function BlogEditor() {
     model: aiModel?.model,
   });
 
+  // ── EditorJS Lifecycle ─────────────────────
   useEffect(() => {
-    if (!textEditor.isReady) {
-      setTextEditor(
-        new EditorJS({
-          holderId: "textEditor",
-          data: Array.isArray(content) ? content[0] : content,
-          tools: tools,
-          placeholder: "Let's write an awesome story",
-        }),
+    const editor = new EditorJS({
+      holder: "textEditor",
+      data: Array.isArray(content) ? content[0] : content,
+      tools: tools,
+      placeholder: "Let's write an awesome story",
+    });
+
+    editorInstanceRef.current = editor;
+    setTextEditor(editor);
+
+    return () => {
+      if (editor && typeof editor.destroy === "function") {
+        try {
+          editor.destroy();
+        } catch (err) {
+          console.error("EditorJS cleanup error:", err);
+        }
+      }
+      editorInstanceRef.current = null;
+      setTextEditor({ isReady: false });
+    };
+  }, []);
+
+  // ── Background Autosave ─────────────────────
+  const performAutosave = async () => {
+    if (isSavingRef.current) return;
+    const editor = editorInstanceRef.current || textEditor;
+    if (!editor || typeof editor.save !== "function") return;
+
+    try {
+      const contentData = await editor.save();
+      const currentBlog = blogStateRef.current || {};
+      const currentTitle = (currentBlog.title || "").trim();
+      const hasBlocks = contentData?.blocks && contentData.blocks.length > 0;
+      const hasMeaningfulBlocks =
+        hasBlocks &&
+        contentData.blocks.some(
+          (b) =>
+            b.data &&
+            (b.data.text ||
+              b.data.file ||
+              b.data.embed ||
+              b.data.source ||
+              b.data.code),
+        );
+
+      // Skip autosave if title and editor content are both completely empty
+      if (!currentTitle && !hasMeaningfulBlocks) {
+        return;
+      }
+
+      isSavingRef.current = true;
+      setAutosaveStatus("saving");
+
+      const draftTitle = currentTitle || "Untitled Draft";
+
+      const blogObj = {
+        title: draftTitle,
+        banner: currentBlog.banner || "",
+        des: currentBlog.des || "",
+        content: contentData,
+        tags: currentBlog.tags || [],
+        draft: true,
+      };
+
+      // Always save a local backup to localStorage as safety net
+      try {
+        const localKey = `writeflow_draft_${activeBlogIdRef.current || "current"}`;
+        localStorage.setItem(
+          localKey,
+          JSON.stringify({ ...blogObj, savedAt: Date.now() }),
+        );
+      } catch (localErr) {
+        console.warn("Local storage draft backup failed:", localErr);
+      }
+
+      const { data } = await axios.post(
+        import.meta.env.VITE_SERVER_DOMAIN + "/blog/create-blog",
+        { ...blogObj, id: activeBlogIdRef.current },
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        },
       );
+
+      if (data && data.id) {
+        const savedId = data.id;
+        activeBlogIdRef.current = savedId;
+        setBlog((current) => ({
+          ...current,
+          blog_id: savedId,
+          content: contentData,
+        }));
+
+        // Seamlessly update URL without reloading or navigating away
+        if (!blog_id && window.history && window.history.replaceState) {
+          window.history.replaceState(null, "", `/editor/${savedId}`);
+        }
+      }
+
+      const now = new Date();
+      setLastSavedTime(
+        now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      );
+      setAutosaveStatus("saved");
+    } catch (err) {
+      console.error("Autosave background error:", err);
+      setAutosaveStatus("offline");
+    } finally {
+      isSavingRef.current = false;
     }
+  };
+
+  // ── Autosave Interval (every 2 minutes) ─────
+  useEffect(() => {
+    // 2 minutes = 120,000 milliseconds
+    const AUTOSAVE_INTERVAL_MS = 120000;
+    const timer = setInterval(() => {
+      performAutosave();
+    }, AUTOSAVE_INTERVAL_MS);
+
+    return () => clearInterval(timer);
+  }, [access_token]);
+
+  // ── Prevent accidental tab/browser close ───
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      const currentBlog = blogStateRef.current || {};
+      if (currentBlog.title || currentBlog.banner) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, []);
 
   const handleBannerUpload = (e) => {
@@ -312,15 +457,17 @@ function BlogEditor() {
 
       uploadImage(img, access_token)
         .then((url) => {
+          toast.dismiss(loadingToast);
           if (url) {
-            toast.dismiss(loadingToast);
             toast.success("Uploaded 🎉");
             setBlog((current) => ({ ...current, banner: url }));
+          } else {
+            toast.error("Image upload failed");
           }
         })
         .catch((err) => {
           toast.dismiss(loadingToast);
-          return toast.error(err);
+          return toast.error(err?.message || "Failed to upload image");
         });
     }
   };
@@ -381,19 +528,29 @@ function BlogEditor() {
       return toast.error("Upload a blog banner to publish it.");
     }
 
-    if (!title.length) {
+    if (!title.trim().length) {
       return toast.error("Write blog title to publish it.");
     }
 
-    if (textEditor.isReady) {
-      textEditor.save().then((data) => {
-        if (data.blocks.length) {
-          setBlog((current) => ({ ...current, content: data }));
-          setEditorState("publish");
-        } else {
-          return toast.error("Write something in your blog to publish it");
-        }
-      });
+    const editor = editorInstanceRef.current || textEditor;
+
+    if (editor && typeof editor.save === "function") {
+      editor
+        .save()
+        .then((data) => {
+          if (data && data.blocks && data.blocks.length) {
+            setBlog((current) => ({ ...current, content: data }));
+            setEditorState("publish");
+          } else {
+            return toast.error("Write something in your blog to publish it");
+          }
+        })
+        .catch((err) => {
+          console.error("Editor save error on publish:", err);
+          toast.error("Failed to save editor content");
+        });
+    } else {
+      toast.error("Editor is not ready yet");
     }
   };
 
@@ -402,48 +559,68 @@ function BlogEditor() {
       return;
     }
 
-    if (!title.length) {
-      return toast.error("write blog title before saving it as draft");
+    if (!title.trim().length) {
+      return toast.error("Write blog title before saving it as draft");
     }
 
     const loadingToast = toast.loading("Saving draft ......");
     e.target.classList.add("disable");
 
-    if (textEditor && textEditor.isReady) {
-      textEditor.save().then((content) => {
-        const blogObj = {
-          title,
-          banner,
-          des,
-          content,
-          tags,
-          draft: true,
-        };
+    const editor = editorInstanceRef.current || textEditor;
 
-        axios
-          .post(
-            import.meta.env.VITE_SERVER_DOMAIN + "/blog/create-blog",
-            { ...blogObj, id: blog_id },
-            {
-              headers: {
-                Authorization: `Bearer ${access_token}`,
+    if (editor && typeof editor.save === "function") {
+      editor
+        .save()
+        .then((content) => {
+          const blogObj = {
+            title,
+            banner,
+            des,
+            content,
+            tags,
+            draft: true,
+          };
+
+          axios
+            .post(
+              import.meta.env.VITE_SERVER_DOMAIN + "/blog/create-blog",
+              { ...blogObj, id: activeBlogIdRef.current || blog_id },
+              {
+                headers: {
+                  Authorization: `Bearer ${access_token}`,
+                },
               },
-            },
-          )
-          .then(() => {
-            e.target.classList.remove("disable");
-            toast.dismiss(loadingToast);
-            toast.success("Saved 👍");
-            setTimeout(() => {
-              navigate("/dashboard/blogs?tab=draft");
-            }, 500);
-          })
-          .catch(({ response }) => {
-            e.target.classList.remove("disable");
-            toast.dismiss(loadingToast);
-            toast.error(response?.data?.error || "Failed to save draft");
-          });
-      });
+            )
+            .then(({ data }) => {
+              if (data && data.id) {
+                activeBlogIdRef.current = data.id;
+                setBlog((current) => ({
+                  ...current,
+                  blog_id: data.id,
+                  content,
+                }));
+                if (!blog_id && window.history && window.history.replaceState) {
+                  window.history.replaceState(null, "", `/editor/${data.id}`);
+                }
+              }
+              e.target.classList.remove("disable");
+              toast.dismiss(loadingToast);
+              toast.success("Saved 👍");
+              setTimeout(() => {
+                navigate("/dashboard/blogs?tab=draft");
+              }, 500);
+            })
+            .catch(({ response }) => {
+              e.target.classList.remove("disable");
+              toast.dismiss(loadingToast);
+              toast.error(response?.data?.error || "Failed to save draft");
+            });
+        })
+        .catch((err) => {
+          e.target.classList.remove("disable");
+          toast.dismiss(loadingToast);
+          toast.error("Failed to capture editor content");
+        });
     } else {
       e.target.classList.remove("disable");
       toast.dismiss(loadingToast);
@@ -466,7 +643,27 @@ function BlogEditor() {
           {title.length ? title : "New Blog"}
         </p>
 
-        <div className="flex gap-4 ml-auto">
+        <div className="flex items-center gap-4 ml-auto">
+          {/* Subtle Autosave Indicator */}
+          {autosaveStatus === "saving" && (
+            <span className="text-xs text-dark-grey flex items-center gap-1.5 animate-pulse whitespace-nowrap max-sm:hidden">
+              <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+              Autosaving...
+            </span>
+          )}
+          {autosaveStatus === "saved" && lastSavedTime && (
+            <span className="text-xs text-dark-grey/80 flex items-center gap-1 whitespace-nowrap max-sm:hidden">
+              <span className="w-2 h-2 rounded-full bg-green-500"></span>
+              Autosaved at {lastSavedTime}
+            </span>
+          )}
+          {autosaveStatus === "offline" && (
+            <span className="text-xs text-amber-600 flex items-center gap-1 whitespace-nowrap max-sm:hidden">
+              <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+              Saved locally
+            </span>
+          )}
+
           <button className="btn-dark py-2" onClick={handlePublishEvent}>
             Publish
           </button>
