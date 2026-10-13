@@ -428,10 +428,18 @@ const Embed = ({ service, source, embed, caption, width, height }) => {
 
     // YouTube
     const ytMatch = source.match(
-      /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/,
+      /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([a-zA-Z0-9_-]{11})/i,
     );
     if (ytMatch) {
-      return `https://www.youtube.com/embed/${ytMatch[1]}?rel=0`;
+      let startTime = "";
+      const timeMatch = source.match(/[?&]t=([0-9]+m)?([0-9]+s?|[0-9]+)/i);
+      if (timeMatch) {
+        let seconds = 0;
+        if (timeMatch[1]) seconds += parseInt(timeMatch[1], 10) * 60;
+        if (timeMatch[2]) seconds += parseInt(timeMatch[2], 10);
+        if (seconds > 0) startTime = `?start=${seconds}`;
+      }
+      return `https://www.youtube.com/embed/${ytMatch[1]}${startTime}`;
     }
 
     // CodePen  — convert /pen/ → /embed/
@@ -586,14 +594,15 @@ const BlogContent = ({ block }) => {
       );
 
     case "embed":
+    case "youtube":
       return (
         <Embed
-          service={data.service}
-          source={data.source}
-          embed={data.embed}
-          caption={data.caption}
-          width={data.width}
-          height={data.height}
+          service={data?.service || "youtube"}
+          source={data?.source}
+          embed={data?.embed}
+          caption={data?.caption}
+          width={data?.width}
+          height={data?.height}
         />
       );
 

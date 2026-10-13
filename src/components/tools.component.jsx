@@ -83,6 +83,8 @@ import Warning from "@editorjs/warning"; // npm install @editorjs/warning
 import { uploadImage } from "../common/aws";
 import { lookInSession } from "../common/session";
 
+import YouTubeTool from "./youtube-embed.tool.js";
+
 const uploadImagebyURL = (e) => {
   return new Promise((resolve) => resolve(e)).then((url) => ({
     success: 1,
@@ -95,15 +97,18 @@ const uploadImageByFile = (e) => {
   return uploadImage(e, user.access_token)
     .then((url) => {
       if (url) return { success: 1, file: { url } };
+      return { success: 0 };
     })
     .catch((err) => {
       console.error("[ImageUpload] Failed:", err);
+      return { success: 0 };
     });
 };
 
 export const tools = {
-  // ── Existing tools ──────────────────────────
-  embed: Embed,
+  // ── Video & Embed tools ─────────────────────
+  youtube: YouTubeTool,
+  embed: YouTubeTool,
 
   list: {
     class: List,
