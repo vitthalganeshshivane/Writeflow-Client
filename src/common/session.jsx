@@ -1,17 +1,39 @@
 const storeInSession = (key, value) => {
-  return sessionStorage.setItem(key, value);
+  try {
+    localStorage.setItem(key, value);
+  } catch {}
+  try {
+    sessionStorage.setItem(key, value);
+  } catch {}
 };
 
 const lookInSession = (key) => {
-  return sessionStorage.getItem(key);
+  try {
+    const val = localStorage.getItem(key);
+    if (val !== null) return val;
+  } catch {}
+  try {
+    return sessionStorage.getItem(key);
+  } catch {}
+  return null;
 };
 
 const removeFromSession = (key) => {
-  return sessionStorage.removeItem(key);
+  try {
+    localStorage.removeItem(key);
+  } catch {}
+  try {
+    sessionStorage.removeItem(key);
+  } catch {}
 };
 
 const logOutUser = () => {
-  sessionStorage.clear();
+  try {
+    localStorage.removeItem("user");
+  } catch {}
+  try {
+    sessionStorage.clear();
+  } catch {}
 };
 
 export { storeInSession, lookInSession, removeFromSession, logOutUser };
