@@ -5,17 +5,22 @@ const FeaturedBadge = ({ size = "sm", className = "" }) => {
 
   return (
     <span
-      className={`gold-bloom-chip gold-shine-sweep inline-flex items-center gap-1.5 font-medium rounded-full select-none cursor-default ${
+      className={`gold-bloom-chip gold-shine-sweep inline-flex items-center gap-1.5 rounded-full select-none cursor-default font-medium leading-none ${
         isLarge
-          ? "px-3.5 py-1 text-xs tracking-wider uppercase font-semibold text-amber-900 dark:text-amber-100"
-          : "px-2.5 py-0.5 text-[11px] tracking-wide uppercase font-semibold text-amber-900 dark:text-amber-100"
+          ? "px-3 py-1 text-xs tracking-wider uppercase font-semibold text-amber-900 dark:text-amber-200"
+          : "px-2.5 py-[3px] text-[10.5px] tracking-wide uppercase font-semibold text-amber-900 dark:text-amber-200"
       } ${className}`}
-      title="Featured Blog"
+      title="Editor's Pick / Featured Article"
     >
-      <span className="text-amber-600 dark:text-yellow-300 animate-pulse text-[12px] leading-none">
-        ✦
-      </span>
-      <span>Featured</span>
+      <svg
+        className={`flex-none ${isLarge ? "w-3 h-3" : "w-2.5 h-2.5"} text-amber-600 dark:text-amber-400`}
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <path d="M12 0L14.7 9.3L24 12L14.7 14.7L12 24L9.3 14.7L0 12L9.3 9.3L12 0Z" />
+      </svg>
+      <span className="font-semibold">Featured</span>
     </span>
   );
 };

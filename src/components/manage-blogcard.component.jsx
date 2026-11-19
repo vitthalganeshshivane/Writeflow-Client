@@ -98,12 +98,25 @@ export const ManagePublishedBlogsCard = ({ blog }) => {
               Edit
             </Link>
             <button
-              className={`pr-4 py-2 underline flex items-center gap-1 ${
-                isFeatured ? "text-amber-600 font-medium" : "text-dark-grey"
+              className={`pr-4 py-2 underline flex items-center gap-1.5 transition-colors ${
+                isFeatured
+                  ? "text-amber-700 dark:text-amber-300 font-semibold"
+                  : "text-dark-grey hover:text-black"
               }`}
               onClick={toggleFeatured}
             >
-              ✦ {isFeatured ? "Featured" : "Feature"}
+              <svg
+                className={`w-2.5 h-2.5 ${
+                  isFeatured
+                    ? "text-amber-600 dark:text-amber-400"
+                    : "text-dark-grey"
+                }`}
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M12 0L14.7 9.3L24 12L14.7 14.7L12 24L9.3 14.7L0 12L9.3 9.3L12 0Z" />
+              </svg>
+              <span>{isFeatured ? "Featured" : "Feature"}</span>
             </button>
             <button
               className="lg:hidden pr-4 py-2 underline"
