@@ -17,6 +17,7 @@ import Notifications from "./pages/notifications.page";
 import ManageBlogs from "./pages/manage-blogs.page";
 import ManageSeries from "./pages/manage-series.page";
 import SeriesPage from "./pages/series.page";
+import LandingPage from "./pages/landing.page";
 
 export const userContext = createContext({});
 export const ThemeContext = createContext({});
@@ -106,6 +107,8 @@ const App = () => {
               <Route path="user/:id" element={<ProfilePage />} />
               <Route path="blog/:blog_id" element={<BlogPage />} />
               <Route path="series/:series_id" element={<SeriesPage />} />
+              <Route path="about" element={<LandingPage />} />
+              <Route path="landing" element={<LandingPage />} />
               <Route path="*" element={<PageNotFound />} />
             </Route>
           </Routes>

@@ -100,6 +100,9 @@ function Navbar() {
           >
             <i className="fi fi-rr-search text-xl"></i>
           </button>
+          <Link to="/about" className="hidden lg:flex gap-1.5 link items-center">
+            <p>Our Story</p>
+          </Link>
           {isAdmin ? (
             <Link to="/editor" className="hidden md:flex gap-2 link">
               <i className="fi fi-rr-file-edit text-xl"></i>

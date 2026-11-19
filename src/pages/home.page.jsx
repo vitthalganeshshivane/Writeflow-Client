@@ -2,7 +2,9 @@ import axios from "axios";
 import AnimationWrapper from "../common/page-animation";
 import InPageNavigation from "../components/inpage-navigation.component";
 import Loader from "../components/loader.component";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { Link } from "react-router-dom";
+import { userContext } from "../App";
 import BlogPostCard from "../components/blog-post.component";
 import MinimalBlogPost from "../components/nobanner-blog-post.component";
 
@@ -13,6 +15,9 @@ import LoadMoreDataBtn from "../components/load-more.component";
 import ThreadsFeed from "../components/threads-feed.component";
 
 const HomePage = () => {
+  const { userAuth } = useContext(userContext) || {};
+  const access_token = userAuth?.access_token;
+
   let [blogs, setBlog] = useState(null);
   // let [blogs, setBlog] = useState({ results: [], total: 0 });
   let [trendingBlogs, setTrendingBlogs] = useState(null);
@@ -116,6 +121,27 @@ const HomePage = () => {
     <AnimationWrapper>
       <section className="h-cover flex justify-center gap-10">
         <div className="w-full">
+          {!access_token && pageState === "home" && (
+            <div className="mb-10 p-6 md:p-8 rounded-2xl bg-grey border border-grey flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+              <div className="max-w-[550px]">
+                <h2 className="font-gelasio text-2xl md:text-3xl font-normal mb-2 text-black leading-tight">
+                  Human stories, distilled ideas.
+                </h2>
+                <p className="font-gelasio text-base text-dark-grey leading-relaxed">
+                  A quiet sanctuary for long-form essays, serialized playbooks, and candid micro-thoughts.
+                </p>
+              </div>
+              <div className="flex items-center gap-3 flex-wrap flex-none">
+                <Link to="/about" className="btn-light py-2.5 px-5 text-sm">
+                  Our Story
+                </Link>
+                <Link to="/signup" className="btn-dark py-2.5 px-5 text-sm">
+                  Start Writing
+                </Link>
+              </div>
+            </div>
+          )}
+
           <InPageNavigation
             routes={[pageState, "threads", "trending blogs"]}
             defaultHidden={["trending blogs"]}
