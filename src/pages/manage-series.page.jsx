@@ -409,7 +409,7 @@ const ManageSeries = () => {
                     No published blogs found. Publish blogs first to add them here.
                   </p>
                 ) : (
-                  <div className="max-h-52 overflow-y-auto space-y-2 border border-grey rounded-xl p-3 bg-grey/30">
+                  <div className="max-h-52 overflow-y-auto space-y-2 border border-grey rounded-xl p-3 pr-2 bg-grey/30">
                     {userBlogs.map((b) => {
                       const id = b.blog_id;
                       const isSelected = selectedBlogIds.includes(id);

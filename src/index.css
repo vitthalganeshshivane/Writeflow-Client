@@ -140,37 +140,67 @@
   display: none; /* Chrome, Safari, Opera */
 }
 
-/* ===== SLICK SCROLLBAR (Notion-style) ===== */
+/* ==========================================================================
+   GLOBAL SUPER-SLIM, MODERN & SMOOTH SCROLLBAR
+   ========================================================================== */
 
-.slick-scrollbar {
-  scrollbar-width: thin; /* Firefox */
-  scrollbar-color: rgba(100, 100, 100, 0.3) transparent;
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(140, 140, 140, 0.3) transparent;
 }
 
-/* Chrome, Edge, Safari */
-.slick-scrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+body[data-theme="dark"] * {
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
 }
 
-.slick-scrollbar::-webkit-scrollbar-track {
+/* Chrome, Edge, Safari, Opera */
+*::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+*::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.slick-scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgba(100, 100, 100, 0.25);
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(140, 140, 140, 0.3);
   border-radius: 999px;
   transition: background-color 0.2s ease;
 }
 
-/* Hover effect (subtle, not aggressive) */
-.slick-scrollbar:hover::-webkit-scrollbar-thumb {
-  background-color: rgba(100, 100, 100, 0.45);
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(140, 140, 140, 0.55);
 }
 
-/* Optional: active (when dragging) */
-.slick-scrollbar::-webkit-scrollbar-thumb:active {
-  background-color: rgba(100, 100, 100, 0.6);
+*::-webkit-scrollbar-thumb:active {
+  background-color: rgba(140, 140, 140, 0.75);
+}
+
+/* Hide ugly default Windows scrollbar arrow buttons */
+*::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Dark mode thumb */
+body[data-theme="dark"] *::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+body[data-theme="dark"] *::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+body[data-theme="dark"] *::-webkit-scrollbar-thumb:active {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+/* ===== SLICK SCROLLBAR (Utility alias) ===== */
+.slick-scrollbar {
+  scrollbar-width: thin;
 }
 
 /* ===== EditorJS table popover: no internal scrollbar ===== */
