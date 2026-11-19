@@ -18,6 +18,7 @@ import ManageBlogs from "./pages/manage-blogs.page";
 import ManageSeries from "./pages/manage-series.page";
 import SeriesPage from "./pages/series.page";
 import LandingPage from "./pages/landing.page";
+import OdysseyPage from "./pages/odyssey.page";
 
 export const userContext = createContext({});
 export const ThemeContext = createContext({});
@@ -111,6 +112,10 @@ const App = () => {
               <Route path="series/:series_id" element={<SeriesPage />} />
               <Route path="about" element={<LandingPage />} />
               <Route path="landing" element={<LandingPage />} />
+              <Route path="odyssey" element={<OdysseyPage />} />
+              <Route path="story" element={<OdysseyPage />} />
+              <Route path="our-story" element={<OdysseyPage />} />
+              <Route path="journey" element={<OdysseyPage />} />
               <Route path="*" element={<PageNotFound />} />
             </Route>
           </Routes>

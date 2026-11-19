@@ -188,6 +188,20 @@ const LandingPage = () => {
                 <i className="fi fi-rr-check text-purple"></i> Zero Distractions
               </span>
             </div>
+
+            {/* The Odyssey Poetic Invitation Button */}
+            <div className="mt-8 flex justify-center">
+              <Link
+                to="/odyssey"
+                className="group inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-grey hover:bg-grey/80 border border-grey text-xs md:text-sm text-dark-grey hover:text-black transition-all shadow-sm"
+              >
+                <i className="fi fi-rr-compass text-purple group-hover:rotate-45 transition-transform duration-300"></i>
+                <span className="font-gelasio italic text-base">The Odyssey</span>
+                <span className="text-dark-grey/50">•</span>
+                <span className="text-xs uppercase tracking-wider font-semibold">The Story Behind the Code</span>
+                <i className="fi fi-rr-arrow-right text-[10px] text-purple"></i>
+              </Link>
+            </div>
           </div>
         </section>
 
@@ -209,6 +223,16 @@ const LandingPage = () => {
               paragraph is given room to breathe, and where readers arrive
               hungry to understand rather than simply scroll.
             </p>
+
+            <div className="mt-10">
+              <Link
+                to="/odyssey"
+                className="inline-flex items-center gap-2 text-sm text-dark-grey hover:text-black border-b border-dark-grey/40 hover:border-black pb-0.5 transition-all font-light"
+              >
+                <span className="font-gelasio italic">Read the story behind the code</span>
+                <i className="fi fi-rr-arrow-right text-xs"></i>
+              </Link>
+            </div>
           </div>
         </section>
 
@@ -379,6 +403,13 @@ const LandingPage = () => {
             <div className="flex flex-wrap items-center gap-6 text-sm text-dark-grey">
               <Link to="/stories" className="hover:text-black transition-colors">
                 Stories
+              </Link>
+              <Link
+                to="/odyssey"
+                className="hover:text-black transition-colors text-purple font-medium flex items-center gap-1.5"
+              >
+                <i className="fi fi-rr-compass text-xs"></i>
+                <span>The Odyssey</span>
               </Link>
               <Link to="/about" className="hover:text-black transition-colors">
                 About

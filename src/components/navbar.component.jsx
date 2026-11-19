@@ -104,6 +104,10 @@ function Navbar() {
             <i className="fi fi-rr-document text-lg hidden sm:block"></i>
             <p>Stories</p>
           </Link>
+          <Link to="/odyssey" className="hidden lg:flex gap-1.5 link items-center text-purple hover:opacity-80">
+            <i className="fi fi-rr-compass text-base text-purple"></i>
+            <p>The Odyssey</p>
+          </Link>
           {isAdmin ? (
             <Link to="/editor" className="hidden md:flex gap-2 link">
               <i className="fi fi-rr-file-edit text-xl"></i>
