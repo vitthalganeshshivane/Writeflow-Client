@@ -91,7 +91,9 @@ const App = () => {
             <Route path="/editor" element={<Editor />} />
             <Route path="/editor/:blog_id" element={<Editor />} />
             <Route path="/" element={<Navbar />}>
-              <Route index element={<HomePage />} />
+              <Route index element={<LandingPage />} />
+              <Route path="stories" element={<HomePage />} />
+              <Route path="feed" element={<HomePage />} />
               <Route path="dashboard" element={<SideNav />}>
                 <Route path="blogs" element={<ManageBlogs />} />
                 <Route path="series" element={<ManageSeries />} />

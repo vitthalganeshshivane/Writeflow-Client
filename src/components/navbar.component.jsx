@@ -100,8 +100,9 @@ function Navbar() {
           >
             <i className="fi fi-rr-search text-xl"></i>
           </button>
-          <Link to="/about" className="hidden lg:flex gap-1.5 link items-center">
-            <p>Our Story</p>
+          <Link to="/stories" className="flex gap-1.5 link items-center">
+            <i className="fi fi-rr-document text-lg hidden sm:block"></i>
+            <p>Stories</p>
           </Link>
           {isAdmin ? (
             <Link to="/editor" className="hidden md:flex gap-2 link">
@@ -154,12 +155,12 @@ function Navbar() {
             </>
           ) : (
             <>
-              <Link to="/signin" className="btn-dark py-2">
-                sign In
+              <Link to="/signin" className="btn-light py-2 px-4 text-sm rounded-full">
+                Login
               </Link>
 
-              <Link to="/signup" className="btn-light py-2  hidden md:block">
-                sign Up
+              <Link to="/signup" className="btn-dark py-2 px-4 text-sm rounded-full">
+                Start Free
               </Link>
             </>
           )}

@@ -132,18 +132,18 @@ const LandingPage = () => {
               {isLoggedIn ? (
                 <>
                   <Link
-                    to="/editor"
+                    to="/stories"
                     className="btn-dark py-3.5 px-8 text-base rounded-full flex items-center gap-2 shadow-sm"
+                  >
+                    <span>Read Stories</span>
+                    <i className="fi fi-rr-arrow-right text-xs"></i>
+                  </Link>
+                  <Link
+                    to="/editor"
+                    className="btn-light py-3.5 px-8 text-base rounded-full flex items-center gap-2"
                   >
                     <i className="fi fi-rr-file-edit text-sm"></i>
                     <span>Open Editor</span>
-                  </Link>
-                  <Link
-                    to="/"
-                    className="btn-light py-3.5 px-8 text-base rounded-full flex items-center gap-2"
-                  >
-                    <span>Read Feed</span>
-                    <i className="fi fi-rr-arrow-right text-xs"></i>
                   </Link>
                 </>
               ) : (
@@ -152,14 +152,22 @@ const LandingPage = () => {
                     to="/signup"
                     className="btn-dark py-3.5 px-8 text-base rounded-full flex items-center gap-2 shadow-sm"
                   >
-                    <span>Start Writing</span>
+                    <span>Start Free</span>
                     <i className="fi fi-rr-arrow-right text-xs"></i>
                   </Link>
                   <Link
-                    to="/"
-                    className="btn-light py-3.5 px-8 text-base rounded-full"
+                    to="/signin"
+                    className="btn-light py-3.5 px-8 text-base rounded-full flex items-center gap-2"
+                  >
+                    <i className="fi fi-rr-user text-xs"></i>
+                    <span>Login</span>
+                  </Link>
+                  <Link
+                    to="/stories"
+                    className="py-3.5 px-6 text-sm text-dark-grey hover:text-black transition-colors flex items-center gap-1.5"
                   >
                     <span>Explore Stories</span>
+                    <i className="fi fi-rr-arrow-right text-xs"></i>
                   </Link>
                 </>
               )}
@@ -310,27 +318,44 @@ const LandingPage = () => {
 
             <div className="flex flex-wrap items-center justify-center gap-4">
               {isLoggedIn ? (
-                <Link
-                  to="/editor"
-                  className="btn-dark py-3.5 px-8 text-base rounded-full"
-                >
-                  Create New Story
-                </Link>
+                <>
+                  <Link
+                    to="/editor"
+                    className="btn-dark py-3.5 px-8 text-base rounded-full"
+                  >
+                    Create New Story
+                  </Link>
+                  <Link
+                    to="/stories"
+                    className="btn-light py-3.5 px-8 text-base rounded-full"
+                  >
+                    Browse Stories
+                  </Link>
+                </>
               ) : (
-                <Link
-                  to="/signup"
-                  className="btn-dark py-3.5 px-8 text-base rounded-full flex items-center gap-2"
-                >
-                  <span>Join Writeflow — Free Forever</span>
-                  <i className="fi fi-rr-arrow-right text-xs"></i>
-                </Link>
+                <>
+                  <Link
+                    to="/signup"
+                    className="btn-dark py-3.5 px-8 text-base rounded-full flex items-center gap-2"
+                  >
+                    <span>Start Free</span>
+                    <i className="fi fi-rr-arrow-right text-xs"></i>
+                  </Link>
+                  <Link
+                    to="/signin"
+                    className="btn-light py-3.5 px-8 text-base rounded-full flex items-center gap-2"
+                  >
+                    <i className="fi fi-rr-user text-xs"></i>
+                    <span>Login</span>
+                  </Link>
+                  <Link
+                    to="/stories"
+                    className="btn-light py-3.5 px-8 text-base rounded-full"
+                  >
+                    Browse Stories
+                  </Link>
+                </>
               )}
-              <Link
-                to="/"
-                className="btn-light py-3.5 px-8 text-base rounded-full"
-              >
-                Browse Recent Stories
-              </Link>
             </div>
           </div>
         </section>
@@ -352,7 +377,7 @@ const LandingPage = () => {
             </div>
 
             <div className="flex flex-wrap items-center gap-6 text-sm text-dark-grey">
-              <Link to="/" className="hover:text-black transition-colors">
+              <Link to="/stories" className="hover:text-black transition-colors">
                 Stories
               </Link>
               <Link to="/about" className="hover:text-black transition-colors">
