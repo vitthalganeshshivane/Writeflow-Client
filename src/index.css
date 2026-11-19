@@ -260,3 +260,57 @@ body[data-theme="dark"]
   .tc-popover.tc-popover--opened::-webkit-scrollbar-thumb:active {
   background-color: rgba(100, 100, 100, 0.6) !important;
 }
+
+/* ─────────────────────────────────────────────
+   Gold Blooming & Shimmer Chip Animation
+───────────────────────────────────────────── */
+@keyframes gold-bloom-pulse {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.4), 0 0 16px rgba(234, 179, 8, 0.25);
+    border-color: rgba(251, 191, 36, 0.75);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.85), 0 0 28px rgba(251, 191, 36, 0.5);
+    border-color: rgba(254, 240, 138, 1);
+  }
+}
+
+@keyframes gold-shine-sweep {
+  0% {
+    transform: translateX(-150%) skewX(-25deg);
+  }
+  40%, 100% {
+    transform: translateX(250%) skewX(-25deg);
+  }
+}
+
+.gold-bloom-chip {
+  animation: gold-bloom-pulse 2.8s ease-in-out infinite;
+  background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 30%, #FDE68A 70%, #F59E0B 100%);
+  border: 1px solid rgba(245, 158, 11, 0.6);
+  position: relative;
+  overflow: hidden;
+}
+
+body[data-theme="dark"] .gold-bloom-chip {
+  background: linear-gradient(135deg, #78350F 0%, #B45309 40%, #D97706 70%, #F59E0B 100%);
+  border: 1px solid rgba(251, 191, 36, 0.7);
+}
+
+.gold-shine-sweep::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.65),
+    transparent
+  );
+  animation: gold-shine-sweep 3.2s ease-in-out infinite;
+  pointer-events: none;
+}
+

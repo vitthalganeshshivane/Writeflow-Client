@@ -10,6 +10,7 @@ import MinimalBlogPost from "../components/nobanner-blog-post.component";
 import NoDataMessage from "../components/nodata.component";
 import LoadMoreDataBtn from "../components/load-more.component";
 import BlogPostCard from "../components/blog-post.component";
+import SeriesCard from "../components/series-card.component";
 import { filterPaginationData } from "../common/filter-pagination-data";
 import PageNotFound from "./404.page";
 
@@ -34,6 +35,7 @@ const ProfilePage = () => {
   let [profile, setProfile] = useState(profileDataStructure);
   let [loading, setLoading] = useState(true);
   let [blogs, setBlogs] = useState(null);
+  let [series, setSeries] = useState(null);
   let [profileLoaded, setProfileLoaded] = useState("");
 
   let {
@@ -62,11 +64,26 @@ const ProfilePage = () => {
         }
         setProfileLoaded(profileId);
         getBlogs({ user_id: user._id });
+        getUserSeries(user.personal_info.username);
         setLoading(false);
       })
       .catch((err) => {
         console.log(err);
         setLoading(false);
+      });
+  };
+
+  const getUserSeries = (authorUsername) => {
+    axios
+      .post(import.meta.env.VITE_SERVER_DOMAIN + "/series/user-series", {
+        username: authorUsername,
+      })
+      .then(({ data }) => {
+        setSeries(data.series || []);
+      })
+      .catch((err) => {
+        console.log(err);
+        setSeries([]);
       });
   };
 
@@ -110,6 +127,7 @@ const ProfilePage = () => {
   const resetStates = () => {
     setProfile(profileDataStructure);
     setBlogs(null);
+    setSeries(null);
     setLoading(true);
     setProfileLoaded("");
   };
@@ -155,7 +173,7 @@ const ProfilePage = () => {
 
           <div className="max-md:mt-12 w-full">
             <InPageNavigation
-              routes={["Blogs published", "About"]}
+              routes={["Blogs published", "Series", "About"]}
               defaultHidden={["About"]}
             >
               <>
@@ -179,6 +197,25 @@ const ProfilePage = () => {
                   <NoDataMessage message="No Blogs Published" />
                 )}
                 <LoadMoreDataBtn state={blogs} fetchDataFun={getBlogs} />
+              </>
+
+              <>
+                {series === null ? (
+                  <Loader />
+                ) : series.length ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                    {series.map((s, i) => (
+                      <AnimationWrapper
+                        key={s.series_id || i}
+                        transition={{ duration: 1, delay: i * 0.1 }}
+                      >
+                        <SeriesCard series={s} />
+                      </AnimationWrapper>
+                    ))}
+                  </div>
+                ) : (
+                  <NoDataMessage message="No Series Created" />
+                )}
               </>
 
               <AboutUser

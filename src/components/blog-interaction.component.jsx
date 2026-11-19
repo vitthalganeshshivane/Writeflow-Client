@@ -26,8 +26,39 @@ const BlogInteraction = () => {
   } = useContext(BlogContext);
 
   let {
-    userAuth: { username, access_token },
+    userAuth: { username, access_token, isAdmin },
   } = useContext(userContext);
+
+  const handleToggleFeatured = () => {
+    if (!access_token) {
+      toast.error("Please login to feature this blog");
+      return;
+    }
+
+    axios
+      .post(
+        import.meta.env.VITE_SERVER_DOMAIN + "/blog/toggle-featured",
+        { blog_id },
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        },
+      )
+      .then(({ data }) => {
+        setBlog((prev) => ({ ...prev, is_featured: data.is_featured }));
+        toast.success(
+          data.is_featured
+            ? "Marked as featured ⭐"
+            : "Removed from featured",
+        );
+      })
+      .catch((err) => {
+        toast.error(
+          err.response?.data?.error || "Failed to update featured status",
+        );
+      });
+  };
 
   useEffect(() => {
     if (access_token) {
@@ -138,7 +169,26 @@ const BlogInteraction = () => {
           <p className="text-xl text-dark-grey">{total_comments}</p>
         </div>
 
-        <div className="flex gap-6">
+        <div className="flex gap-4 sm:gap-6 items-center">
+          {(username === author_username || isAdmin) && (
+            <button
+              onClick={handleToggleFeatured}
+              className={`flex items-center gap-1.5 text-sm font-medium px-3 py-1 rounded-full transition-colors ${
+                blog?.is_featured
+                  ? "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200 border border-amber-300 dark:border-amber-700"
+                  : "text-dark-grey hover:text-black border border-grey"
+              }`}
+              title={
+                blog?.is_featured
+                  ? "Remove featured badge"
+                  : "Mark as featured"
+              }
+            >
+              <span className="text-amber-500">✦</span>
+              <span>{blog?.is_featured ? "Featured" : "Feature"}</span>
+            </button>
+          )}
+
           {username === author_username ? (
             <Link
               to={`/editor/${blog_id}`}

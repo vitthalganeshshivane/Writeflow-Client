@@ -15,6 +15,8 @@ import ChangePassword from "./pages/change-password.page";
 import EditProfile from "./pages/edit-profile.page";
 import Notifications from "./pages/notifications.page";
 import ManageBlogs from "./pages/manage-blogs.page";
+import ManageSeries from "./pages/manage-series.page";
+import SeriesPage from "./pages/series.page";
 
 export const userContext = createContext({});
 export const ThemeContext = createContext({});
@@ -91,6 +93,7 @@ const App = () => {
               <Route index element={<HomePage />} />
               <Route path="dashboard" element={<SideNav />}>
                 <Route path="blogs" element={<ManageBlogs />} />
+                <Route path="series" element={<ManageSeries />} />
                 <Route path="notifications" element={<Notifications />} />
               </Route>
               <Route path="settings" element={<SideNav />}>
@@ -102,6 +105,7 @@ const App = () => {
               <Route path="search/:query" element={<SearchPage />} />
               <Route path="user/:id" element={<ProfilePage />} />
               <Route path="blog/:blog_id" element={<BlogPage />} />
+              <Route path="series/:series_id" element={<SeriesPage />} />
               <Route path="*" element={<PageNotFound />} />
             </Route>
           </Routes>

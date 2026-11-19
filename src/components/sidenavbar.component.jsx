@@ -85,6 +85,15 @@ const SideNav = () => {
             </NavLink>
 
             <NavLink
+              to="/dashboard/series"
+              onClick={(e) => setPageState(e.target.innerText)}
+              className="sidebar-link"
+            >
+              <i className="fi fi-rr-collection"></i>
+              Series
+            </NavLink>
+
+            <NavLink
               to="/dashboard/notifications"
               onClick={(e) => setPageState(e.target.innerText)}
               className="sidebar-link"

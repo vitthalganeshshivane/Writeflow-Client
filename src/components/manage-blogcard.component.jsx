@@ -3,6 +3,9 @@ import { getDay } from "../common/date";
 import { useContext, useState } from "react";
 import { userContext } from "../App";
 import axios from "axios";
+import { toast } from "react-hot-toast";
+import FeaturedBadge from "./featured-badge.component";
+import SeriesBadge from "./series-badge.component";
 
 const BlogStats = ({ stats }) => {
   return (
@@ -32,13 +35,40 @@ const BlogStats = ({ stats }) => {
 };
 
 export const ManagePublishedBlogsCard = ({ blog }) => {
-  let { banner, blog_id, title, publishedAt, activity } = blog;
+  let { banner, blog_id, title, publishedAt, activity, is_featured, series } = blog;
 
   let {
     userAuth: { access_token },
   } = useContext(userContext);
 
   let [showStat, setShowStat] = useState(false);
+  let [isFeatured, setIsFeatured] = useState(Boolean(is_featured));
+
+  const toggleFeatured = () => {
+    if (!access_token) return;
+
+    axios
+      .post(
+        import.meta.env.VITE_SERVER_DOMAIN + "/blog/toggle-featured",
+        { blog_id },
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        },
+      )
+      .then(({ data }) => {
+        setIsFeatured(data.is_featured);
+        toast.success(
+          data.is_featured ? "Marked as featured ⭐" : "Removed from featured",
+        );
+      })
+      .catch((err) => {
+        toast.error(
+          err.response?.data?.error || "Failed to toggle featured status",
+        );
+      });
+  };
 
   return (
     <>
@@ -51,6 +81,10 @@ export const ManagePublishedBlogsCard = ({ blog }) => {
 
         <div className="flex flex-col justify-between py-2 w-full min-w-[300px]">
           <div>
+            <div className="flex items-center gap-2 mb-2 flex-wrap">
+              {isFeatured && <FeaturedBadge size="sm" />}
+              {series && <SeriesBadge series={series} />}
+            </div>
             <Link
               className="blog-title mb-4 hover:underline"
               to={`/blog/${blog_id}`}
@@ -59,10 +93,18 @@ export const ManagePublishedBlogsCard = ({ blog }) => {
             </Link>
             <p className="line-clamp-1">Published on {getDay(publishedAt)}</p>
           </div>
-          <div className="flex gap-6 mt-3">
+          <div className="flex gap-6 mt-3 items-center">
             <Link to={`/editor/${blog_id}`} className="pr-4 py-2 underline">
               Edit
             </Link>
+            <button
+              className={`pr-4 py-2 underline flex items-center gap-1 ${
+                isFeatured ? "text-amber-600 font-medium" : "text-dark-grey"
+              }`}
+              onClick={toggleFeatured}
+            >
+              ✦ {isFeatured ? "Featured" : "Feature"}
+            </button>
             <button
               className="lg:hidden pr-4 py-2 underline"
               onClick={() => setShowStat((preVal) => !preVal)}
