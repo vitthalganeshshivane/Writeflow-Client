@@ -17,7 +17,7 @@ const SeriesCard = ({ series, isOwner = false, onDelete }) => {
   } = series;
 
   const {
-    userAuth: { access_token, user_id, username },
+    userAuth: { access_token, user_id },
   } = useContext(userContext);
 
   const [favCount, setFavCount] = useState(favorites_count);
@@ -51,7 +51,7 @@ const SeriesCard = ({ series, isOwner = false, onDelete }) => {
         setFavCount(data.favorites_count);
         toast.success(
           data.is_favorited
-            ? "Added to favorites ❤️"
+            ? "Saved to favorites ❤️"
             : "Removed from favorites"
         );
       })
@@ -69,39 +69,38 @@ const SeriesCard = ({ series, isOwner = false, onDelete }) => {
     "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=800&q=80";
 
   return (
-    <div className="group rounded-2xl border border-grey bg-white dark:bg-black/30 overflow-hidden hover:shadow-md hover:border-purple/40 transition-all flex flex-col justify-between">
+    <div className="group rounded-xl border border-grey bg-white overflow-hidden hover:border-dark-grey/40 transition-all flex flex-col justify-between">
       <div>
-        {/* Banner with YouTube-style playlist overlay */}
-        <Link to={`/series/${series_id}`} className="block relative aspect-video overflow-hidden bg-grey">
+        {/* Banner with clean Chapter count overlay */}
+        <Link
+          to={`/series/${series_id}`}
+          className="block relative aspect-video overflow-hidden bg-grey"
+        >
           <img
             src={banner || defaultBanner}
             alt={title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
 
-          {/* YouTube playlist bar on the right */}
-          <div className="absolute right-0 top-0 bottom-0 w-24 bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center text-white gap-1">
-            <i className="fi fi-rr-collection text-xl"></i>
-            <span className="text-sm font-semibold">{blogs?.length || 0}</span>
-            <span className="text-[10px] uppercase tracking-wider text-white/80">
-              Videos
+          <span className="absolute bottom-3 right-3 bg-black/75 backdrop-blur-sm text-white text-xs px-3 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
+            <i className="fi fi-rr-collection text-[10px]"></i>
+            <span>
+              {blogs?.length || 0} {blogs?.length === 1 ? "Chapter" : "Chapters"}
             </span>
-          </div>
+          </span>
         </Link>
 
         {/* Content */}
         <div className="p-5">
-          <div className="flex items-center justify-between gap-2 mb-2">
-            <Link
-              to={`/series/${series_id}`}
-              className="text-lg font-bold text-black dark:text-white group-hover:text-purple transition-colors line-clamp-1"
-            >
-              {title}
-            </Link>
-          </div>
+          <Link
+            to={`/series/${series_id}`}
+            className="blog-title mb-2 group-hover:text-purple transition-colors block"
+          >
+            {title}
+          </Link>
 
           {description && (
-            <p className="text-sm text-dark-grey line-clamp-2 mb-4 leading-relaxed">
+            <p className="text-sm text-dark-grey line-clamp-2 mb-4 font-gelasio leading-relaxed">
               {description}
             </p>
           )}
@@ -125,14 +124,14 @@ const SeriesCard = ({ series, isOwner = false, onDelete }) => {
       </div>
 
       {/* Footer / Actions */}
-      <div className="px-5 pb-5 pt-2 border-t border-grey/60 flex items-center justify-between">
+      <div className="px-5 pb-5 pt-2 border-t border-grey flex items-center justify-between">
         <button
           onClick={handleFavorite}
           disabled={loadingFav}
           className={`flex items-center gap-1.5 text-xs font-medium py-1.5 px-3 rounded-full border transition-all ${
             isFavorited
-              ? "bg-red/10 border-red/30 text-red"
-              : "border-grey text-dark-grey hover:text-black hover:border-black/30"
+              ? "border-red text-red"
+              : "border-grey text-dark-grey hover:text-black"
           }`}
           title={isFavorited ? "Remove favorite" : "Add to favorites"}
         >

@@ -173,9 +173,9 @@ const BlogInteraction = () => {
           {(username === author_username || isAdmin) && (
             <button
               onClick={handleToggleFeatured}
-              className={`flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full border transition-all ${
+              className={`flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full border transition-all ${
                 blog?.is_featured
-                  ? "bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-200 border-amber-300 dark:border-amber-700/60 shadow-[0_0_8px_rgba(245,158,11,0.2)]"
+                  ? "featured-badge-pill"
                   : "border-grey text-dark-grey hover:text-black hover:border-dark-grey/40"
               }`}
               title={
@@ -184,17 +184,7 @@ const BlogInteraction = () => {
                   : "Click to feature this blog"
               }
             >
-              <svg
-                className={`w-2.5 h-2.5 ${
-                  blog?.is_featured
-                    ? "text-amber-600 dark:text-amber-400"
-                    : "text-dark-grey"
-                }`}
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path d="M12 0L14.7 9.3L24 12L14.7 14.7L12 24L9.3 14.7L0 12L9.3 9.3L12 0Z" />
-              </svg>
+              <i className="fi fi-sr-star text-[10px] leading-none"></i>
               <span>{blog?.is_featured ? "Featured" : "Feature"}</span>
             </button>
           )}

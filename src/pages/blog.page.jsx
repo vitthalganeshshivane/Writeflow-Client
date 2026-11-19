@@ -531,18 +531,18 @@ const BlogPage = () => {
           <div className="max-w-[900px] center py-10 max-lg:px-[5vw]">
             {/* Series Top Banner */}
             {seriesContext && (
-              <div className="mb-6 p-4 rounded-2xl bg-purple/10 border border-purple/20 flex flex-wrap items-center justify-between gap-3">
+              <div className="mb-8 p-4 rounded-xl bg-grey border border-grey flex flex-wrap items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-purple text-white flex items-center justify-center font-bold text-base shadow-sm">
+                  <div className="w-10 h-10 rounded-lg bg-black text-white flex items-center justify-center font-bold text-base">
                     <i className="fi fi-rr-collection"></i>
                   </div>
                   <div>
-                    <p className="text-xs uppercase tracking-wider font-semibold text-purple">
-                      Series • Part {seriesContext.current_part} of {seriesContext.total_parts}
+                    <p className="text-xs uppercase tracking-wider font-semibold text-dark-grey">
+                      Series • Chapter {seriesContext.current_part} of {seriesContext.total_parts}
                     </p>
                     <Link
                       to={`/series/${seriesContext.series_id}`}
-                      className="font-medium text-black dark:text-white hover:text-purple transition-colors line-clamp-1"
+                      className="font-medium text-black hover:text-purple transition-colors line-clamp-1"
                     >
                       {seriesContext.title}
                     </Link>
@@ -550,9 +550,9 @@ const BlogPage = () => {
                 </div>
                 <Link
                   to={`/series/${seriesContext.series_id}`}
-                  className="btn-light py-1.5 px-4 text-sm rounded-full flex items-center gap-2 hover:bg-grey/80"
+                  className="btn-light py-1.5 px-4 text-xs rounded-full flex items-center gap-2"
                 >
-                  <span>View All Chapters</span>
+                  <span>All Chapters</span>
                   <i className="fi fi-rr-arrow-right text-xs"></i>
                 </Link>
               </div>
@@ -633,7 +633,7 @@ const BlogPage = () => {
 
             {/* Series Next / Previous Navigation */}
             {seriesContext && (
-              <div className="my-10 p-6 rounded-2xl bg-grey/50 border border-grey">
+              <div className="my-10 p-6 rounded-xl bg-grey border border-grey">
                 <div className="flex items-center justify-between mb-5">
                   <div className="flex items-center gap-2">
                     <i className="fi fi-rr-collection text-purple text-lg"></i>
@@ -645,7 +645,7 @@ const BlogPage = () => {
                     to={`/series/${seriesContext.series_id}`}
                     className="text-sm font-medium text-purple hover:underline"
                   >
-                    View All {seriesContext.total_parts} Parts →
+                    View All {seriesContext.total_parts} Chapters →
                   </Link>
                 </div>
 
@@ -653,38 +653,38 @@ const BlogPage = () => {
                   {seriesContext.prev_blog ? (
                     <Link
                       to={`/blog/${seriesContext.prev_blog.blog_id}`}
-                      className="p-4 rounded-xl bg-white dark:bg-black/30 border border-grey hover:border-purple hover:shadow-sm transition-all group"
+                      className="p-4 rounded-lg bg-white border border-grey hover:border-dark-grey/40 transition-all group"
                     >
                       <p className="text-xs text-dark-grey mb-1.5 flex items-center gap-1.5">
                         <i className="fi fi-rr-arrow-left text-[11px]"></i>
                         <span>Previous Chapter</span>
                       </p>
-                      <p className="font-medium text-black dark:text-white group-hover:text-purple transition-colors line-clamp-1">
+                      <p className="font-medium text-black group-hover:text-purple transition-colors line-clamp-1">
                         {seriesContext.prev_blog.title}
                       </p>
                     </Link>
                   ) : (
-                    <div className="p-4 rounded-xl border border-dashed border-grey/60 text-xs text-dark-grey flex items-center justify-center">
-                      First article in this series
+                    <div className="p-4 rounded-lg border border-dashed border-dark-grey/30 text-xs text-dark-grey flex items-center justify-center">
+                      First chapter in this series
                     </div>
                   )}
 
                   {seriesContext.next_blog ? (
                     <Link
                       to={`/blog/${seriesContext.next_blog.blog_id}`}
-                      className="p-4 rounded-xl bg-white dark:bg-black/30 border border-grey hover:border-purple hover:shadow-sm transition-all text-right sm:text-right group"
+                      className="p-4 rounded-lg bg-white border border-grey hover:border-dark-grey/40 transition-all text-right sm:text-right group"
                     >
                       <p className="text-xs text-dark-grey mb-1.5 flex items-center justify-end gap-1.5">
                         <span>Next Chapter</span>
                         <i className="fi fi-rr-arrow-right text-[11px]"></i>
                       </p>
-                      <p className="font-medium text-black dark:text-white group-hover:text-purple transition-colors line-clamp-1">
+                      <p className="font-medium text-black group-hover:text-purple transition-colors line-clamp-1">
                         {seriesContext.next_blog.title}
                       </p>
                     </Link>
                   ) : (
-                    <div className="p-4 rounded-xl border border-dashed border-grey/60 text-xs text-dark-grey flex items-center justify-center">
-                      Latest article in this series
+                    <div className="p-4 rounded-lg border border-dashed border-dark-grey/30 text-xs text-dark-grey flex items-center justify-center">
+                      Latest chapter in this series
                     </div>
                   )}
                 </div>
